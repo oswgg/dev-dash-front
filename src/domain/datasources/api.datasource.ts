@@ -5,5 +5,6 @@ import { GhPullRequest } from "../entities/gh-pull-request";
 
 
 export interface ApiDatasource {
-    getPullRequests(): Promise<GhPullRequest[] | null>;
+    getIsImplementationActive(implementation: string): Promise<boolean>;
+    getPullRequests(): Promise<[GhPullRequest[] | null, string?]> ;
 }
