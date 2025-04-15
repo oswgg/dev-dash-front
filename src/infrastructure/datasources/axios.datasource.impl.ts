@@ -26,6 +26,11 @@ export class AxiosDatasourceImpl implements ApiDatasource {
             return Promise.reject({ status: error.status, message: error.response?.data?.error });
         })
     }
+    
+    async activateImplementation(implementation: string) {
+        const state = encodeURIComponent(window.location.href);
+        window.location.href = `${BASE_URL}/implementations/${implementation}/activate?returnTo=${state}`;
+    }
 
     async getIsImplementationActive(implementation: string): Promise<boolean> {
         const response = await this.axiosClient.get(`/implementations/${implementation}`);

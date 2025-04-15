@@ -1,12 +1,22 @@
 import React from 'react';
 import { Github, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ActivateImplementation } from '@/application/activateImplementation';
+import { AxiosDatasourceImpl } from '@/infrastructure/datasources/axios.datasource.impl';
+import { ImplementationsRepositoryImpl } from '@/infrastructure/repositories/implementations.repository.impl';
 
 interface EmptyStateProps {
     type: 'github' | 'jira' | 'all';
 }
 
 const EmptyState: React.FC<EmptyStateProps> = ({ type }) => {
+    const implRepository = new ImplementationsRepositoryImpl(new AxiosDatasourceImpl(''));
+    const activateImpl = new ActivateImplementation(implRepository);
+
+    const handleActivateImplementation = (impl: string) => {
+        activateImpl.execute(impl);
+    }
+
     if (type === 'github') {
         return (
             <div className="flex flex-col items-center justify-center p-8 text-center">
@@ -17,7 +27,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ type }) => {
                 <p className="text-muted-foreground mb-4 max-w-md">
                     Connect your GitHub account to see and track your pull requests in one place.
                 </p>
-                <Button className="gap-2">
+                <Button className="gap-2" onClick={() => handleActivateImplementation("github")}>
                     <Github className="h-4 w-4" />
                     Connect GitHub
                 </Button>

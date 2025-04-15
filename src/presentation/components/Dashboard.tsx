@@ -28,10 +28,10 @@ const Dashboard = () => {
                 </TabsList>
 
                 
-                <TabsContent value="all">
-                    {githubError ? <EmptyState type="jira"/> : renderPRs()}
+                <TabsContent value="all" className="flex flex-col gap-4">
+                    {githubError ? <EmptyState type="all"/> : renderPRs()}
                 </TabsContent>
-                <TabsContent value="github">
+                <TabsContent value="github" className="flex flex-col gap-4">
                     {githubError ? <EmptyState type="github"/> : renderPRs()}
                 </TabsContent>
 
