@@ -1,27 +1,33 @@
 import { GhPullRequest } from "@/domain/entities/gh-pull-request";
 
-
-
-
-
 export class GhPullRequestMapper {
-    public static fromArrayToEntities(ghPullRequests: GhPullRequest[]): GhPullRequest[] {
+    public static fromArrayToEntities(ghPullRequests: any[]): GhPullRequest[] {
         return ghPullRequests.map((ghPullRequest) => this.fromObjectToEntity(ghPullRequest));
     }
 
-    public static fromObjectToEntity(ghPullRequest: { [key: string]: any }): GhPullRequest {
+    public static fromObjectToEntity(pullRequest: { [key: string]: any }): GhPullRequest {
         return {
-            id: ghPullRequest.id,
-            title: ghPullRequest.title,
-            url: ghPullRequest.url,
-            number: ghPullRequest.number,
-            user: ghPullRequest.user,
-            labels: ghPullRequest.labels.map((label: any) => ({
+            id: pullRequest.id,
+            title: pullRequest.title,
+            number: pullRequest.number,
+            state: pullRequest.state,
+            author: pullRequest.author,
+            authorAvatar: pullRequest.authorAvatar,
+            createdAt: new Date(pullRequest.createdAt),
+            updatedAt: new Date(pullRequest.updatedAt),
+            url: pullRequest.url,
+            repositoryName: pullRequest.repositoryName,
+            isDraft: pullRequest.isDraft,
+            isMerged: pullRequest.isMerged,
+            comments: pullRequest.comments,
+            labels: pullRequest.labels.map((label: any) => ({
                 name: label.name,
                 color: label.color,
             })),
-            state: ghPullRequest.state,
-            createdAt: ghPullRequest.created_at,
+            assignees: pullRequest.assignees.map((assignee: any) => ({
+                login: assignee.login,
+                avatar_url: assignee.avatar_url,
+            })),
         };
     }
 }

@@ -1,28 +1,18 @@
-import { GhPullRequest } from "@/domain/entities/gh-pull-request";
-import { useGhPullRequests } from "@/presentation/hooks/useGhPullRequests.hook";
-import { useGetActiveImplementations } from "../hooks/useGetActiveImplementations.hook";
+import Header from "../components/Header";
+import Dashboard from "../components/Dashboard";
+import Layout from "../components/Layout";
 
 
 
 
 const Home = () => {
-    const { github } = useGetActiveImplementations(['github']);
-    const { PRs: ghPullRequests } = useGhPullRequests();
-    
     return (
-        <div>
-            {
-                !github
-                    ? <p>User has no github implementation</p>
-                    : ghPullRequests && ghPullRequests.map((ghPullRequest: GhPullRequest) => {
-                        return (
-                            <div key={ghPullRequest.id}>
-                                <a href={ghPullRequest.url}>{ghPullRequest.title}</a>
-                            </div>
-                        );
-                    })
-            }
-        </div>
+        <>
+            <Header />
+            <Layout>
+                <Dashboard />
+            </Layout>
+        </>
     );
 }
 

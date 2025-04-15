@@ -11,7 +11,7 @@ export class GithubRepositoryImpl implements GithubRepository {
         private readonly api: ApiDatasource
     ) {}
 
-    async getPullRequests(): Promise<[GhPullRequest[] | null, string?]> {
+    async getPullRequests(): Promise<GhPullRequest[]> {
         return this.api.getPullRequests();
     }
 }

@@ -9,29 +9,26 @@ import { useAuth } from "../context/auth.context";
 
 
 export const useGhPullRequests = () => {
-    const [ghPullRequests, setGhPullRequests] = useState<GhPullRequest[] | null>(null);
+    const [ghPullRequests, setGhPullRequests] = useState<GhPullRequest[]>([]);
     const [error, setError] = useState<string | null>(null);
-    const { setAuthError } = useAuth();
+    const { setAuthError, logout } = useAuth();
 
-    const apiClient = new AxiosDatasourceImpl('');
+    const apiClient = new AxiosDatasourceImpl('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmFmYzE0NWYyNmY0NjE0NWE5NmZhNiIsImlhdCI6MTc0NDUwMTc4MCwiZXhwIjoxNzQ3MDkzNzgwfQ.Haf0QQx2cDCyclZcww7vMbBKFkmEniusPUhBbRIamjk');
     const gitHubRepository = new GithubRepositoryImpl(apiClient);
 
 
     const getPullRequests = async () => {
         try {
             const getPRs = new GetGhPullRequests(gitHubRepository);
-            const [PRs, error] = await getPRs.execute();
+            const PRs = await getPRs.execute();
 
-            if (error) {
-                setError(error);
-                return;
-            }
-            
             setGhPullRequests(PRs);
         } catch (error: any) {
             if (error.status === 401) {
                 setAuthError("Your session has expired. Please login again.");
+                logout();
             }
+            setError(error.message);
         }
     }
 

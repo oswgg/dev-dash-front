@@ -9,7 +9,7 @@ export class GetGhPullRequests {
         private readonly gitHubRepository: GithubRepository
     ) { }
 
-    async execute(): Promise<[GhPullRequest[] | null, string?]> {
+    async execute(): Promise<GhPullRequest[]> {
         return await this.gitHubRepository.getPullRequests();
     }
 }

@@ -1,6 +1,6 @@
 import { ApiDatasource } from "@/domain/datasources/api.datasource";
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
-import { GhPullRequestMapper } from "../mappers/gh-pull-request.mapper";
+import { GhPullRequestMapper } from "@/infrastructure/mappers/gh-pull-request.mapper";
 import { GhPullRequest } from "@/domain/entities/gh-pull-request";
 
 
@@ -36,14 +36,14 @@ export class AxiosDatasourceImpl implements ApiDatasource {
         return response.data.active;
     }
 
-    async getPullRequests(): Promise<[GhPullRequest[] | null, string?]> {
+    async getPullRequests(): Promise<GhPullRequest[]> {
         const response = await this.axiosClient.get("/services/github/pull-requests");
         if (!response.data) {
-            return [null];
+            return [];
         }
 
         const ghPullRequests = GhPullRequestMapper.fromArrayToEntities(response.data);
 
-        return [ghPullRequests];
+        return ghPullRequests;
     }
 }
