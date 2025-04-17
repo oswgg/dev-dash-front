@@ -1,108 +1,52 @@
-import { Avatar, AvatarFallback, AvatarImage, Badge, Card, CardContent, CardFooter, CardHeader, Separator } from "@/components/ui"
-import { GitPullRequest, MessageSquare, Clock } from "lucide-react"
-import { GhPullRequest } from "@/domain/entities/gh-pull-request"
-import GhLabel from "./GhLabel"
-import GhAsignee from "./GhAsignee"
+import { useState } from "react"
+import { Card } from "@/components/ui"
+import { ChevronDown, ExternalLink } from "lucide-react"
+import { GhPullRequest } from "@/domain/entities/gh-pull-request.entity"
+import { PullRequestHeader } from "./PullRequestHeader"
+import { PullRequestBody } from "./PullRequestBody"
 
-const PullRequestCard = ({
-    title,
-    state,
-    author,
-    authorAvatar,
-    createdAt,
-    updatedAt,
-    repositoryName,
-    comments,
-    labels,
-    assignees,
-}: GhPullRequest) => {
-    // Format the date to a relative time string (e.g., "2 hours ago")
-    const formatDate = (date: Date) => {
-        const now = new Date()
-        const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+const PullRequestCard = (props: GhPullRequest) => {
+    const [showBody, setShowBody] = useState(false);
+    const hasBody = !!props.body;
 
-        if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`
-        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`
-        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`
-        if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`
-        if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`
-        return `${Math.floor(diffInSeconds / 31536000)} years ago`
-    }
+    // Handle external link click without triggering the card's onClick
+    const handleExternalLinkClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        window.open(props.url, '_blank');
+    };
 
-    // Function to check if a color has enough contrast against white
-
-    // Determine the status for display
     return (
-        <Card className="w-full">
-            <CardHeader>
-                <div className="flex items-start gap-2">
-                    {/* Icon */}
-                    <div className="mt-0.5">
-                        <GitPullRequest className="h-5 w-5 text-green-600" />
+        <Card 
+            className={`w-full relative ${hasBody ? 'cursor-pointer hover:border-primary/50 hover:shadow-sm transition-all duration-500' : ''}`}
+            onClick={() => hasBody && setShowBody(!showBody)}
+        >
+            <div 
+                className="absolute right-3 top-3 z-10 px-2 py-1 rounded bg-primary/10 hover:bg-primary/20 flex items-center gap-1 text-xs font-medium text-primary transition-colors"
+                title="Open PR on GitHub"
+                onClick={handleExternalLinkClick}
+            >
+                <span>Open PR</span>
+                <ExternalLink className="h-3 w-3" />
+            </div>
+
+            {hasBody && (
+                <div 
+                    className="absolute right-[100px] top-3 z-10 w-5 h-5 rounded-full bg-muted flex items-center justify-center hover:bg-muted-foreground/20"
+                    title="Click to view PR description"
+                >
+                    <div className={`transform transition-transform duration-300 ${showBody ? 'rotate-180' : ''}`}>
+                        <ChevronDown className="h-3 w-3 text-muted-foreground" />
                     </div>
-
-                    {/* Title */}
-                    <div className="flex-1">
-                        <h3 className="font-semibold text-xl text-base leading-tight">{title}</h3>
-
-                        <span className="text-sm text-muted-foreground mt-1 block">in {repositoryName}</span>
-
-                        {/* Labes section */}
-                        {labels.length > 0 &&
-                            (<div className="flex flex-wrap gap-1 mt-2 -ml-1">
-                                {labels.map((label, index) => <GhLabel key={index} label={label} />)}
-                            </div>)
-                        }
-                    </div>
-
-                    <Badge className='capitalize' variant='outline'>
-                        {state}
-                    </Badge>
-
                 </div>
+            )}
+            
+            <PullRequestHeader {...props} />
 
-            </CardHeader>
-
-            <CardContent className="pb-2">
-                {/* Assignees section */}
-                {assignees.length > 0 && (
-                    <div className="flex items-center mt-2">
-                        <div className="flex -space-x-2">
-                            {assignees.map((assignee, index) => <GhAsignee key={index} assignee={assignee} />)}
-                        </div>
-                    </div>
-                )}
-            </CardContent>
-
-            <CardFooter className="pt-2">
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-
-                    <div className="flex items-center gap-1">
-                        <Avatar className="h-5 w-5">
-                            <AvatarImage src={authorAvatar || "/placeholder.svg"} alt={author} />
-                            <AvatarFallback>{author.charAt(0).toUpperCase()}</AvatarFallback>
-                        </Avatar>
-                        <span>{author}</span>
-                    </div>
-
-                    <Separator orientation="vertical" className="h-4" />
-                    <div className="flex items-center gap-1">
-                        <MessageSquare className="h-4 w-4" />
-                        <span>{comments}</span>
-                    </div>
-
-                    <Separator orientation="vertical" className="h-4" />
-                    <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        <span title={`Updated ${formatDate(updatedAt)}`}>{formatDate(createdAt)}</span>
-                    </div>
-
-                    <Separator orientation="vertical" className="h-4" />
-                </div>
-            </CardFooter>
+            <div className={`overflow-hidden transition-all duration-400 ease-in-out ${showBody ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                {props.body && <PullRequestBody body={props.body} />}
+            </div>
         </Card>
     )
 }
-
 
 export default PullRequestCard;

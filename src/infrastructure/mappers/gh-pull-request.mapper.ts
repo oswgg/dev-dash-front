@@ -1,4 +1,4 @@
-import { GhPullRequest } from "@/domain/entities/gh-pull-request";
+import { GhPullRequest } from "@/domain/entities/gh-pull-request.entity";
 
 export class GhPullRequestMapper {
     public static fromArrayToEntities(ghPullRequests: any[]): GhPullRequest[] {
@@ -17,6 +17,7 @@ export class GhPullRequestMapper {
             updatedAt: new Date(pullRequest.updatedAt),
             url: pullRequest.url,
             repositoryName: pullRequest.repositoryName,
+            body: pullRequest.body,
             isDraft: pullRequest.isDraft,
             isMerged: pullRequest.isMerged,
             comments: pullRequest.comments,

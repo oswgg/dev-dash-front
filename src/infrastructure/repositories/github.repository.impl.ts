@@ -1,6 +1,6 @@
 import { GithubRepository } from "@/domain/repositories/github.repository";
 import { ApiDatasource } from "@/domain/datasources/api.datasource";
-import { GhPullRequest } from "@/domain/entities/gh-pull-request";
+import { GhPullRequest } from "@/domain/entities/gh-pull-request.entity";
 
 
 

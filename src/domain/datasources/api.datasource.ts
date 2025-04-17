@@ -1,4 +1,4 @@
-import { GhPullRequest } from "../entities/gh-pull-request";
+import { GhPullRequest } from "../entities/gh-pull-request.entity";
 
 
 

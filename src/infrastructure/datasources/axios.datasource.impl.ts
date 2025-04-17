@@ -1,7 +1,7 @@
 import { ApiDatasource } from "@/domain/datasources/api.datasource";
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { GhPullRequestMapper } from "@/infrastructure/mappers/gh-pull-request.mapper";
-import { GhPullRequest } from "@/domain/entities/gh-pull-request";
+import { GhPullRequest } from "@/domain/entities/gh-pull-request.entity";
 
 
 

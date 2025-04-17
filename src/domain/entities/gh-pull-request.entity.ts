@@ -13,6 +13,7 @@ export interface GhPullRequest {
     updatedAt: Date,
     url: string,
     repositoryName: string,
+    body: string | null,
     isDraft: boolean,
     isMerged: boolean,
     comments: number,

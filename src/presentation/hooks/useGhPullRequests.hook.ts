@@ -1,5 +1,5 @@
 import { GetGhPullRequests } from "@/application/getGhPullRequests";
-import { GhPullRequest } from "@/domain/entities/gh-pull-request";
+import { GhPullRequest } from "@/domain/entities/gh-pull-request.entity";
 import { AxiosDatasourceImpl } from "@/infrastructure/datasources/axios.datasource.impl";
 import { GithubRepositoryImpl } from "@/infrastructure/repositories/github.repository.impl";
 import { useEffect, useState } from "react";

@@ -14,7 +14,7 @@ const GhAsignee = ({ assignee }: { assignee: { login: string, avatar_url: string
                     <AvatarFallback>{assignee.login.charAt(0)}</AvatarFallback>
                 </Avatar>
             </TooltipTrigger>
-            <TooltipContent side="bottom" className="bg-black">
+            <TooltipContent side="bottom" className="bg-black dark:text-white">
                 {assignee.login}
             </TooltipContent>
         </Tooltip>
