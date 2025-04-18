@@ -6,18 +6,31 @@ import { PullRequestHeader } from "./PullRequestHeader"
 import { PullRequestBody } from "./PullRequestBody"
 
 const PullRequestCard = (props: GhPullRequest) => {
+    const { body, url, internal_status } = props;
+
     const [showBody, setShowBody] = useState(false);
-    const hasBody = !!props.body;
+    const hasBody = !!body;
+    
+    // Determine card styling based on internal_status
+    const isUpdated = internal_status === 'updated';
+    const isNew = internal_status === 'new';
+    
+    const cardStyles = `
+        w-full relative 
+        ${hasBody ? 'cursor-pointer hover:border-primary/50 hover:shadow-sm transition-all duration-500' : ''}
+        ${isUpdated ? 'border-green-500 shadow-[0_0_0_1px_rgba(34,197,94,0.3)] dark:shadow-[0_0_0_1px_rgba(34,197,94,0.2)]' : ''}
+        ${isNew ? 'border-blue-500 shadow-[0_0_0_1px_rgba(59,130,246,0.3)] dark:shadow-[0_0_0_1px_rgba(59,130,246,0.2)]' : ''}
+    `;
 
     // Handle external link click without triggering the card's onClick
     const handleExternalLinkClick = (e: React.MouseEvent) => {
         e.stopPropagation();
-        window.open(props.url, '_blank');
+        window.open(url, '_blank');
     };
 
     return (
         <Card 
-            className={`w-full relative ${hasBody ? 'cursor-pointer hover:border-primary/50 hover:shadow-sm transition-all duration-500' : ''}`}
+            className={cardStyles}
             onClick={() => hasBody && setShowBody(!showBody)}
         >
             <div 
@@ -42,8 +55,9 @@ const PullRequestCard = (props: GhPullRequest) => {
             
             <PullRequestHeader {...props} />
 
+
             <div className={`overflow-hidden transition-all duration-400 ease-in-out ${showBody ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                {props.body && <PullRequestBody body={props.body} />}
+                {body && <PullRequestBody body={body} />}
             </div>
         </Card>
     )

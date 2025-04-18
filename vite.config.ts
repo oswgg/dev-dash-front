@@ -7,8 +7,12 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
     plugins: [react(), tailwindcss()],
     resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src"),
-      },
+        alias: {
+            "@": path.resolve(__dirname, "./src"),
+        },
+    },
+    server: {
+        host: true, // o '0.0.0.0'
+        port: 5173, // o cualquier otro puerto que estés usando
     },
 })
