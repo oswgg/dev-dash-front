@@ -10,7 +10,7 @@ interface EmptyStateProps {
 }
 
 const EmptyState: React.FC<EmptyStateProps> = ({ type }) => {
-    const implRepository = new ImplementationsRepositoryImpl(new AxiosDatasourceImpl(''));
+    const implRepository = new ImplementationsRepositoryImpl(new AxiosDatasourceImpl('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmFmYzE0NWYyNmY0NjE0NWE5NmZhNiIsImlhdCI6MTc0NDUwMTc4MCwiZXhwIjoxNzQ3MDkzNzgwfQ.Haf0QQx2cDCyclZcww7vMbBKFkmEniusPUhBbRIamjk'));
     const activateImpl = new ActivateImplementation(implRepository);
 
     const handleActivateImplementation = (impl: string) => {
