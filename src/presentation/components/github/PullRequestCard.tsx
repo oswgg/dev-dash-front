@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 import { Card } from "@/components/ui"
 import { ChevronDown, ExternalLink } from "lucide-react"
 import { GhPullRequest } from "@/domain/entities/gh-pull-request.entity"
 import { PullRequestHeader } from "./PullRequestHeader"
 import { PullRequestBody } from "./PullRequestBody"
+
+interface PRCardProps extends GhPullRequest {
+    index: number;
+}
 
 interface StatusStyles {
     border: string;
@@ -11,8 +16,8 @@ interface StatusStyles {
     text: string;
 }
 
-const PullRequestCard = (props: GhPullRequest) => {
-    const { body, url, internal_status } = props;
+const PullRequestCard = (props:  PRCardProps) => {
+    const { body, url, internal_status, index } = props;
     const [showBody, setShowBody] = useState(false);
     const [showBorder, setShowBorder] = useState(true);
     const hasBody = !!body;
@@ -88,44 +93,56 @@ const PullRequestCard = (props: GhPullRequest) => {
     const handleCardClick = () => hasBody && setShowBody(!showBody);
 
     return (
-        <Card className={cardStyles} onClick={handleCardClick}>
-            <div className="absolute right-3 top-3 z-10 flex items-center justify-center gap-2">
-                {/* Description toggle button */}
-                {hasBody && (
-                    <div
-                        className="w-5 h-5 rounded-full bg-muted flex items-center justify-center hover:bg-muted-foreground/20"
-                        title="Click to view PR description"
-                    >
-                        <div className={`transform transition-transform duration-300 ${showBody ? 'rotate-180' : ''}`}>
-                            <ChevronDown className="h-3 w-3 text-muted-foreground" />
+        <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{
+                duration: 0.3,
+                delay: index * 0.05,
+                ease: "easeOut"
+            }}
+        >
+
+            <Card className={cardStyles} onClick={handleCardClick}>
+                <div className="absolute right-3 top-3 z-10 flex items-center justify-center gap-2">
+                    {/* Description toggle button */}
+                    {hasBody && (
+                        <div
+                            className="w-5 h-5 rounded-full bg-muted flex items-center justify-center hover:bg-muted-foreground/20"
+                            title="Click to view PR description"
+                        >
+                            <div className={`transform transition-transform duration-300 ${showBody ? 'rotate-180' : ''}`}>
+                                <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                            </div>
                         </div>
+                    )}
+                    {/* Status badge */}
+                    {
+                        internal_status &&
+                        <div className={`px-2 py-1 rounded capitalize text-xs font-medium ${statusStyles.bg} ${statusStyles.text}`}>
+                            {internal_status}
+                        </div>
+                    }
+                    {/* External link */}
+                    <div
+                        className="px-2 py-1 rounded bg-primary/10 hover:bg-primary/20 flex items-center gap-1 text-xs font-medium text-primary transition-colors"
+                        title="Open PR on GitHub"
+                        onClick={handleExternalLinkClick}
+                    >
+                        <span>Open PR</span>
+                        <ExternalLink className="h-3 w-3" />
                     </div>
-                )}
-                {/* Status badge */}
-                {
-                    internal_status &&
-                    <div className={`px-2 py-1 rounded capitalize text-xs font-medium ${statusStyles.bg} ${statusStyles.text}`}>
-                        {internal_status}
-                    </div>
-                }
-                {/* External link */}
-                <div
-                    className="px-2 py-1 rounded bg-primary/10 hover:bg-primary/20 flex items-center gap-1 text-xs font-medium text-primary transition-colors"
-                    title="Open PR on GitHub"
-                    onClick={handleExternalLinkClick}
-                >
-                    <span>Open PR</span>
-                    <ExternalLink className="h-3 w-3" />
                 </div>
-            </div>
 
 
-            {/* PR Content */}
-            <PullRequestHeader {...props} />
-            <div className={`overflow-hidden transition-all duration-400 ease-in-out ${showBody ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                {body && <PullRequestBody body={body} />}
-            </div>
-        </Card>
+                {/* PR Content */}
+                <PullRequestHeader {...props} />
+                <div className={`overflow-hidden transition-all duration-400 ease-in-out ${showBody ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                    {body && <PullRequestBody body={body} />}
+                </div>
+            </Card>
+        </motion.div>
     )
 }
 

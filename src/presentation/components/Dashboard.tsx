@@ -3,6 +3,7 @@ import { Tabs, TabsList, TabsTrigger, } from "@/components/ui/tabs"
 import { useGhPullRequests } from "../hooks/useGhPullRequests.hook";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { useGetActiveImplementations } from "../hooks/useGetActiveImplementations.hook";
+import { AnimatePresence } from "framer-motion";
 import PullRequestCard from "./github/PullRequestCard";
 import EmptyState from "./EmptyState";
 
@@ -32,19 +33,21 @@ const Dashboard = () => {
 
     const renderPRs = (activeTab: string) => {
         if (activeTab === 'mine') {
-            if (ownedError) {   
+            if (ownedError) {
                 return <p>{ownedError}</p>
             }
-            return owned.map((pr, index) => (
-                <PullRequestCard key={index} {...pr} />
-            ));
+            return owned.map((pr, index) => {
+                const props = { ...pr, index };
+                return <PullRequestCard key={index}  {...props} />
+            });
         } else if (activeTab === 'review') {
             if (toReviewError) {
                 return <p>{toReviewError}</p>
             }
-            return toReview.map((pr, index) => (
-                <PullRequestCard key={index} {...pr} />
-            ));
+            return toReview.map((pr, index) =>{
+                const props = { ...pr, index };
+                return <PullRequestCard key={index}  {...props} />
+            }); 
         }
     };
 
@@ -57,12 +60,12 @@ const Dashboard = () => {
                             <TabsList className="grid w-full grid-cols-2">
                                 <TabsTrigger
                                     value="all"
-                                    className="dark:data-[state=active]:bg-black data-[state=active]:text-white"
+                                    className="dark:data-[state=active]:bg-black data-[state=active]:text-white transition-all duration-300 ease-in-out"
                                 >
                                     All </TabsTrigger>
                                 <TabsTrigger
                                     value="github"
-                                    className="dark:data-[state=active]:bg-black data-[state=active]:text-white"
+                                    className="dark:data-[state=active]:bg-black data-[state=active]:text-white transition-all duration-300 ease-in-out"
                                 >
                                     Github
                                 </TabsTrigger>
@@ -70,27 +73,23 @@ const Dashboard = () => {
                         </Tabs>
                     </div>
 
-                    <div className="w-1/4">
-                        {
-                            activeServiceTab === 'github' && (
-                                <Tabs defaultValue="mine" className="w-full" onValueChange={handleFilterChange}>
-                                    <TabsList className="grid w-full grid-cols-2">
-                                        <TabsTrigger
-                                            value="mine"
-                                            className="dark:data-[state=active]:bg-black data-[state=active]:text-white"
-                                        >
-                                            By you
-                                        </TabsTrigger>
-                                        <TabsTrigger
-                                            value="review"
-                                            className="dark:data-[state=active]:bg-black data-[state=active]:text-white"
-                                        >
-                                            To review
-                                        </TabsTrigger>
-                                    </TabsList>
-                                </Tabs>
-                            )
-                        }
+                    <div className="w-1/4 transition-all duration-300 ease-in-out">
+                        <Tabs defaultValue="mine" className={`w-full ${activeServiceTab==='github' ? 'opacity-100': 'opacity-0'} transition-opacity duration-300 ease-in-out  animate-in fade-in-0`} onValueChange={handleFilterChange}>
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger
+                                    value="mine"
+                                    className="dark:data-[state=active]:bg-black data-[state=active]:text-white"
+                                >
+                                    By you
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="review"
+                                    className="dark:data-[state=active]:bg-black data-[state=active]:text-white"
+                                >
+                                    To review
+                                </TabsTrigger>
+                            </TabsList>
+                        </Tabs>
                     </div>
                 </div>
 
@@ -100,17 +99,16 @@ const Dashboard = () => {
                             {
                                 error
                                     ? <EmptyState type="all" />
-                                    : renderPRs(activeTab)
+                                    : (<AnimatePresence> {renderPRs(activeTab)} </AnimatePresence>)
                             }
                         </TabsContent>
                         <TabsContent value="github" className="flex flex-col gap-4">
                             {
                                 !github  // Si no hay github, mostramos activar github
-                                ? <EmptyState type="all" />
-                                : error
-                                    ? <p>{error}</p> // Si hay error, mostramos el error
-                                    : renderPRs(activeTab)
-                            }
+                                    ? <EmptyState type="all" />
+                                    : error
+                                        ? <p>{error}</p> // Si hay error, mostramos el error
+                                        : (<AnimatePresence> {renderPRs(activeTab)} </AnimatePresence>)}
                         </TabsContent>
                     </Tabs>
                 </div>
