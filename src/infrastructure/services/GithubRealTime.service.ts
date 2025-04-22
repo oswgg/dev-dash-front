@@ -20,11 +20,14 @@ export class GithubRealTimeService {
     subscribeToUpdatedPullRequest(callback: (data: any) => void) {
         this.socketClient.on('updated-pull-request', (data: any) => {
             const updated = GhPullRequestMapper.fromObjectToEntity(data);
-            updated.internal_status = 'updated';
+
+            if (     updated.state === 'closed' && !updated.isMerged) updated.internal_status = 'closed';
+            else if (updated.state === 'closed' && updated.isMerged) updated.internal_status = 'merged';
+            else     updated.internal_status = 'updated';
+            
             callback(updated);
         });
     }
-
     unsubscribeToNewPullRequest() {
         this.socketClient.off('new-pull-request');
     }

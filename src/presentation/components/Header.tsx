@@ -3,6 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 const Header = () => {
+    const handleGoToRepository = () => {
+        window.open('https://github.com/oswgg/dev-dash-front', '_blank');
+    }
+
     return (
         <header className="border-b border-border bg-card sticky top-0 z-10">
             <div className="mx-auto flex items-center justify-between h-16 px-4 max-w-[1000px]">
@@ -23,7 +27,7 @@ const Header = () => {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="icon" aria-label="GitHub">
+                    <Button variant="ghost" size="icon" aria-label="GitHub" onClick={handleGoToRepository}>
                         <Github className="h-5 w-5" />
                     </Button>
 

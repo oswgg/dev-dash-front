@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth.context";
 import { GetGhPullRequestsToReview } from "@/application/getGhPullRequestsToReview";
 import { GithubFactory } from "@/infrastructure/factories/GithubFactory.factory";
-import { GithubRealTimeService } from "@/infrastructure/services/GithubRealTime.service";
+import { GithubRealTimeService } from "@/infrastructure/services/githubRealTime.service";
 
 
 
@@ -70,10 +70,10 @@ export const useGhPullRequests = (): {
 
         githubRealTimeService.subscribeToNewPullRequest((newPR: GhPullRequest) => {
             setOwnedPullRequests(current => [newPR, ...current]);
-        })
+        });
         githubRealTimeService.subscribeToUpdatedPullRequest((updatedPR: GhPullRequest) => {
             setOwnedPullRequests(current => current.map(pr => pr.title === updatedPR.title ? updatedPR : pr));
-        })
+        });
 
         return () => {
             githubRealTimeService.unsubscribeToNewPullRequest();

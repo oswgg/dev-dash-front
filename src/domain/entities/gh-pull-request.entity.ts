@@ -19,5 +19,5 @@ export interface GhPullRequest {
     comments: number;
     labels: Array<{ name: string, color: string }>,
     assignees: Array<{ login: string, avatar_url: string }>;
-    internal_status?: 'new' | 'updated' | 'closed';
+    internal_status?: 'new' | 'updated' | 'closed' | 'merged';
 }
