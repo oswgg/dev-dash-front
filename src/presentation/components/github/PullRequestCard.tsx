@@ -96,9 +96,8 @@ const PullRequestCard = (props:  PRCardProps) => {
         <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, height: 0 }}
             transition={{
-                duration: 0.3,
+                duration: 0.5,
                 delay: index * 0.05,
                 ease: "easeOut"
             }}

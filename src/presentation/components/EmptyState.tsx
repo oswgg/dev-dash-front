@@ -1,15 +1,14 @@
-import React from 'react';
 import { Github, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ActivateImplementation } from '@/application/activateImplementation';
 import { AxiosDatasourceImpl } from '@/infrastructure/datasources/axios.datasource.impl';
 import { ImplementationsRepositoryImpl } from '@/infrastructure/repositories/implementations.repository.impl';
+import { motion } from "framer-motion";
 
-interface EmptyStateProps {
-    type: 'github' | 'jira' | 'all';
-}
+type EmptyStateProps = 'github' | 'github-empty' | 'all' | 'all-empty';
 
-const EmptyState: React.FC<EmptyStateProps> = ({ type }) => {
+
+const EmptyState = ({ type }: { type: EmptyStateProps }) => {
     const implRepository = new ImplementationsRepositoryImpl(new AxiosDatasourceImpl('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmFmYzE0NWYyNmY0NjE0NWE5NmZhNiIsImlhdCI6MTc0NDUwMTc4MCwiZXhwIjoxNzQ3MDkzNzgwfQ.Haf0QQx2cDCyclZcww7vMbBKFkmEniusPUhBbRIamjk'));
     const activateImpl = new ActivateImplementation(implRepository);
 
@@ -17,8 +16,8 @@ const EmptyState: React.FC<EmptyStateProps> = ({ type }) => {
         activateImpl.execute(impl);
     }
 
-    if (type === 'github') {
-        return (
+    const EmptyDictionary = {
+        'github': (
             <div className="flex flex-col items-center justify-center p-8 text-center">
                 <div className="rounded-full bg-muted p-3 mb-4">
                     <Github className="h-10 w-10 text-muted-foreground" />
@@ -32,46 +31,54 @@ const EmptyState: React.FC<EmptyStateProps> = ({ type }) => {
                     Connect GitHub
                 </Button>
             </div>
-        );
-    }
-
-    if (type === 'jira') {
-        return (
+        ),
+        'github-empty': (
+            <div className="flex flex-col items-center justify-center p-8 text-center">
+                <div className="rounded-full bg-muted p-3 mb-4">
+                    <Github className="h-10 w-10 text-muted-foreground" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">No Pull Requests were found</h3>
+                <p className="text-muted-foreground mb-4 max-w-md">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod voluptatem ratione amet provident, repellendus laborum molestiae dolore totam culpa eius. Natus, perferendis?</p>
+                <Button className="gap-2">
+                    Refresh
+                </Button>
+            </div>
+        ),
+        'all-empty': (
             <div className="flex flex-col items-center justify-center p-8 text-center">
                 <div className="rounded-full bg-muted p-3 mb-4">
                     <ExternalLink className="h-10 w-10 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No Jira Tickets Connected</h3>
+                <h3 className="text-lg font-semibold mb-2">Connect Your Accounts</h3>
                 <p className="text-muted-foreground mb-4 max-w-md">
-                    Connect your Jira account to see and track your tickets alongside your GitHub PRs.
+                    Track all your work in one place by connecting your GitHub and Jira accounts.
                 </p>
-                <Button className="gap-2">
-                    Connect Jira
-                </Button>
+                <div className="flex gap-3">
+                    <Button className="gap-2">
+                        <Github className="h-4 w-4" />
+                        Connect GitHub
+                    </Button>
+                    <Button variant="outline">
+                        Connect Jira
+                    </Button>
+                </div>
             </div>
-        );
+        )
     }
 
+
     return (
-        <div className="flex flex-col items-center justify-center p-8 text-center">
-            <div className="rounded-full bg-muted p-3 mb-4">
-                <ExternalLink className="h-10 w-10 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Connect Your Accounts</h3>
-            <p className="text-muted-foreground mb-4 max-w-md">
-                Track all your work in one place by connecting your GitHub and Jira accounts.
-            </p>
-            <div className="flex gap-3">
-                <Button className="gap-2">
-                    <Github className="h-4 w-4" />
-                    Connect GitHub
-                </Button>
-                <Button variant="outline">
-                    Connect Jira
-                </Button>
-            </div>
-        </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+                duration: 0.5,
+                ease: "easeOut"
+            }}>
+            {EmptyDictionary[type]}
+        </motion.div>
     );
-};
+}
 
 export default EmptyState;
