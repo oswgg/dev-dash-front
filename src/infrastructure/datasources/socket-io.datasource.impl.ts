@@ -8,8 +8,12 @@ import { io, Socket } from "socket.io-client";
 export class SocketIOClient implements SocketDatasource {
     private readonly socket: Socket;
 
-    constructor(url: string) {
-        this.socket = io(url);
+    constructor(url: string, token: string) {
+        this.socket = io(url, {
+            auth: {
+                token: `${token}`
+            }
+        });
     }
 
     connect(): void {

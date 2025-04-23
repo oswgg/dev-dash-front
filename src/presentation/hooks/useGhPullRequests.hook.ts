@@ -37,7 +37,6 @@ export const useGhPullRequests = (): {
             setData(result.value);
             setError(null);
         } else {
-            console.error(result.reason);
             setData([]);
             setError(result.reason.message);
         }

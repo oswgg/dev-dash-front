@@ -9,6 +9,6 @@ export class GithubFactory {
     }
     
     static createSocketDatasource(url: string): any {
-        return new SocketIOClient(url);
+        return new SocketIOClient(url, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmFmYzE0NWYyNmY0NjE0NWE5NmZhNiIsImlhdCI6MTc0NDUwMTc4MCwiZXhwIjoxNzQ3MDkzNzgwfQ.Haf0QQx2cDCyclZcww7vMbBKFkmEniusPUhBbRIamjk');
     }
 }
