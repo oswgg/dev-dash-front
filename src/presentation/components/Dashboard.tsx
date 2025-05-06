@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { useGhPullRequests } from "../hooks/useGhPullRequests.hook";
 import { useGetActiveImplementations } from "../hooks/useGetActiveImplementations.hook";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import PullRequestCard from "./github/PullRequestCard";
 import EmptyState from "./EmptyState";
 
@@ -54,7 +54,7 @@ const Dashboard = () => {
                 <div className="flex justify-between items-center w-full mb-4">
                     <div className="w-1/4">
                         <Tabs value={serviceTab} defaultValue="all" className="w-full" onValueChange={handleServiceTabChange}>
-                            <TabsList className="grid w-full grid-cols-2">
+                            <TabsList className="grid w-full grid-cols-3">
                                 <TabsTrigger
                                     value="all"
                                     className="dark:data-[state=active]:bg-black data-[state=active]:text-white transition-all duration-300 ease-in-out"
@@ -66,6 +66,13 @@ const Dashboard = () => {
                                 >
                                     Github
                                 </TabsTrigger>
+                                <TabsTrigger
+                                    value="monday"
+                                    className="dark:data-[state=active]:bg-black data-[state=active]:text-white transition-all duration-300 ease-in-out"
+                                >
+                                    Monday
+                                </TabsTrigger>
+
                             </TabsList>
                         </Tabs>
                     </div>
@@ -102,6 +109,15 @@ const Dashboard = () => {
                             {
                                 !github  // Si no hay github, mostramos activar github
                                     ? <EmptyState type="github" />
+                                    : error
+                                        ? <p>{error}</p> // Si hay error, mostramos el error
+                                        : (<AnimatePresence>{renderPRs()}</AnimatePresence>)
+                            }
+                        </TabsContent>
+                        <TabsContent value="monday">
+                            {
+                                !monday  // Si no hay monday, mostramos activar monday
+                                    ? "a"
                                     : error
                                         ? <p>{error}</p> // Si hay error, mostramos el error
                                         : (<AnimatePresence>{renderPRs()}</AnimatePresence>)

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -6,6 +6,7 @@ interface AuthContextType {
     setAuthError: (error: string | null) => void;
     login: (token: string) => void;
     logout: () => void;
+    getAuthHeader: () => any;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -14,6 +15,7 @@ const AuthContext = createContext<AuthContextType>({
     setAuthError: () => {},
     login: () => {},
     logout: () => {},
+    getAuthHeader: () => {}
 });
     
 
@@ -25,6 +27,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
     const [authError, setAuthError] = useState<string | null>(null);
     
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            setToken(storedToken);
+        }
+    }, [])
+    
     const login = (token: string) => {
         setToken(token);
         setAuthError(null);
@@ -35,6 +44,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(null);
         localStorage.removeItem('token');
     }
+    
+    const getAuthHeader = () => {
+        return token ? { Authorization: `Bearer ${token}` } : {};
+    }
+    
     return (
         <AuthContext.Provider
             value={{
@@ -43,6 +57,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 setAuthError,
                 login,
                 logout,
+                getAuthHeader
             }}
         >
             {children}

@@ -1,11 +1,10 @@
 import { AxiosDatasourceImpl } from "../datasources/axios.datasource.impl";
 
 
-
-
+type HeadersProvider = () => string 
 
 export class ImplementationFactory {
-    static createApiDatasource(token: string): any {
-        return new AxiosDatasourceImpl(token);
+    static createApiDatasource(headersProvider: HeadersProvider): any {
+        return new AxiosDatasourceImpl(headersProvider());
     }
 }

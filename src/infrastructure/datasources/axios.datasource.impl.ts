@@ -32,4 +32,10 @@ export class AxiosDatasourceImpl implements ApiDatasource {
     public get getToken(): string {
         return this.token;
     }
+    
+    async post(url: string, data: any): Promise<any> {
+        console.log(data);
+        const response = await this.axiosClient.post(url, data);
+        return response.data;
+    }
 }

@@ -10,9 +10,9 @@ import { ImplementationFactory } from "@/infrastructure/factories/Implementation
 
 export const useGetActiveImplementations = (implementationsToCheck: string[]) => {
     const [implementations, setImplementations] = useState<{ [key: string]: boolean }>({});
-    const { setAuthError } = useAuth();
+    const { setAuthError, getAuthHeader } = useAuth();
 
-    const apiClient = ImplementationFactory.createApiDatasource('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmFmYzE0NWYyNmY0NjE0NWE5NmZhNiIsImlhdCI6MTc0NTA0MDk4MiwiZXhwIjoxNzQ3NjMyOTgyfQ.NfqVT1azfqNWCwaEqf9Wj8S1gi60tzF1jnGFNbWF80U');
+    const apiClient = ImplementationFactory.createApiDatasource(getAuthHeader);
     const implementationsRepository = new ImplementationsRepositoryImpl(apiClient);
     const getIsImplementationActive = new GetIsImplementationActive(implementationsRepository);
 
