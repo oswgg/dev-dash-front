@@ -2,7 +2,7 @@ import { GetGhPullRequests } from "@/application/getGhPullRequests";
 import { GhPullRequest } from "@/domain/entities/gh-pull-request.entity";
 import { GithubRepositoryImpl } from "@/infrastructure/repositories/github.repository.impl";
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/auth.context";
+import { useAuthContext } from "../context/auth.context";
 import { GetGhPullRequestsToReview } from "@/application/getGhPullRequestsToReview";
 import { GithubFactory } from "@/infrastructure/factories/GithubFactory.factory";
 import { GithubRealTimeService } from "@/infrastructure/services/githubRealTime.service";
@@ -21,10 +21,10 @@ export const useGhPullRequests = (): {
     const [ownedError, setOwnedError] = useState<string | null>(null);
     const [toReviewError, setToReviewError] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const { setAuthError, logout } = useAuth();
+    const { setAuthError, logout, getAuthHeader } = useAuthContext();
 
-    const apiClient = GithubFactory.createApiDatasource('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmFmYzE0NWYyNmY0NjE0NWE5NmZhNiIsImlhdCI6MTc0NTA0MDk4MiwiZXhwIjoxNzQ3NjMyOTgyfQ.NfqVT1azfqNWCwaEqf9Wj8S1gi60tzF1jnGFNbWF80U');
-    const socketClient = GithubFactory.createSocketDatasource('http://localhost:3000/github');
+    const apiClient = GithubFactory.createApiDatasource(getAuthHeader());
+    const socketClient = GithubFactory.createSocketDatasource('http://localhost:3000/github', getAuthHeader());
 
     const gitHubRepository = new GithubRepositoryImpl(apiClient);
     const githubRealTimeService = new GithubRealTimeService(socketClient);
@@ -50,6 +50,7 @@ export const useGhPullRequests = (): {
     
         handleResult(owned, setOwnedPullRequests, setOwnedError);
         handleResult(toReview, setPullRequestsToReview, setToReviewError);
+        
     
         const isUnauthorized = 
             (owned.status === 'rejected' && owned.reason.status === 401) ||
@@ -59,7 +60,6 @@ export const useGhPullRequests = (): {
             const msg = "Your session has expired. Please login again.";
             setAuthError(msg);
             setError(msg);
-            logout();
         }
     };
 

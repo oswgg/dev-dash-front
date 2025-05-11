@@ -4,6 +4,7 @@ import { ThemeProvider } from "./presentation/context/theme.context";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "@/presentation/pages/Home";
 import Login from "@/presentation/pages/Login";
+import OAuthLoading from "./presentation/pages/OAuthLoading";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                     <div className="min-h-screen ">
                         <Routes>
                             <Route path="/login" element={<Login />} />
+                            <Route path="/oauth/:provider" element={<OAuthLoading />} />
                             <Route path="/" element={<Home />} />
                             <Route path="*" element={<p>Not Found</p>} />
                         </Routes>

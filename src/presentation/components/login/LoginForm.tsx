@@ -1,9 +1,10 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
 
-export const LoginForm = ({ form, onSubmit, isLoading }) => (
+export const LoginForm = ({ form, error, onSubmit, isLoading }) => (
     <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -32,6 +33,14 @@ export const LoginForm = ({ form, onSubmit, isLoading }) => (
                     </FormItem>
                 )}
             />
+
+                    {error && (
+                        <Alert variant="destructive" className="mb-4">
+                            <AlertDescription>
+                                {error}
+                            </AlertDescription>
+                        </Alert>
+                    )}
             <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                     <div className="flex items-center justify-center">

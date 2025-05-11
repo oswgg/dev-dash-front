@@ -8,7 +8,7 @@ export class GithubFactory {
         return new AxiosDatasourceImpl(token);
     }
     
-    static createSocketDatasource(url: string): any {
-        return new SocketIOClient(url, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmFmYzE0NWYyNmY0NjE0NWE5NmZhNiIsImlhdCI6MTc0NDUwMTc4MCwiZXhwIjoxNzQ3MDkzNzgwfQ.Haf0QQx2cDCyclZcww7vMbBKFkmEniusPUhBbRIamjk');
+    static createSocketDatasource(url: string, token: string): any {
+        return new SocketIOClient(url, token);
     }
 }

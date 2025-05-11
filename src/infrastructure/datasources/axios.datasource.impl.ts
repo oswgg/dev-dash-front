@@ -12,8 +12,9 @@ export class AxiosDatasourceImpl implements ApiDatasource {
             baseURL: BASE_URL,
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${this.token}`
-            }
+                "Authorization": this.token
+            },
+            withCredentials: true,
         });
 
         this.axiosClient.interceptors.response.use((response): AxiosResponse<any, any> | Promise<AxiosResponse<any, any>> => {
@@ -34,7 +35,6 @@ export class AxiosDatasourceImpl implements ApiDatasource {
     }
     
     async post(url: string, data: any): Promise<any> {
-        console.log(data);
         const response = await this.axiosClient.post(url, data);
         return response.data;
     }

@@ -28,16 +28,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [authError, setAuthError] = useState<string | null>(null);
     
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
-            setToken(storedToken);
+        if (token) {
+            localStorage.setItem('token', token);
+        } else {
+            localStorage.removeItem('token');
         }
-    }, [])
+    }, [token]);
     
     const login = (token: string) => {
         setToken(token);
         setAuthError(null);
         localStorage.setItem('token', token);
+        console.log(token);
+        console.log(localStorage.getItem('token'));
     }
     
     const logout = () => {
@@ -46,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
     
     const getAuthHeader = () => {
-        return token ? { Authorization: `Bearer ${token}` } : {};
+        return token ? `Bearer ${token}` : ``;
     }
     
     return (
@@ -65,4 +68,4 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuthContext = () => useContext(AuthContext);

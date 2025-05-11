@@ -4,12 +4,15 @@ import { ActivateImplementation } from '@/application/activateImplementation';
 import { AxiosDatasourceImpl } from '@/infrastructure/datasources/axios.datasource.impl';
 import { ImplementationsRepositoryImpl } from '@/infrastructure/repositories/implementations.repository.impl';
 import { motion } from "framer-motion";
+import { useAuthContext } from '../context/auth.context';
 
 type EmptyStateProps = 'github' | 'github-empty' | 'all' | 'all-empty';
 
 
 const EmptyState = ({ type }: { type: EmptyStateProps }) => {
-    const implRepository = new ImplementationsRepositoryImpl(new AxiosDatasourceImpl('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmFmYzE0NWYyNmY0NjE0NWE5NmZhNiIsImlhdCI6MTc0NDUwMTc4MCwiZXhwIjoxNzQ3MDkzNzgwfQ.Haf0QQx2cDCyclZcww7vMbBKFkmEniusPUhBbRIamjk'));
+    const { getAuthHeader } = useAuthContext();
+
+    const implRepository = new ImplementationsRepositoryImpl(new AxiosDatasourceImpl(getAuthHeader()));
     const activateImpl = new ActivateImplementation(implRepository);
 
     const handleActivateImplementation = (impl: string) => {

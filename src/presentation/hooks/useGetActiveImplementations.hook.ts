@@ -1,7 +1,7 @@
 import { GetIsImplementationActive } from "@/application/getActiveImplementation";
 import { ImplementationsRepositoryImpl } from "@/infrastructure/repositories/implementations.repository.impl";
 import { useEffect, useState } from "react"
-import { useAuth } from "../context/auth.context";
+import { useAuthContext } from "../context/auth.context";
 import { ImplementationFactory } from "@/infrastructure/factories/Implementation.factory";
 
 
@@ -10,7 +10,7 @@ import { ImplementationFactory } from "@/infrastructure/factories/Implementation
 
 export const useGetActiveImplementations = (implementationsToCheck: string[]) => {
     const [implementations, setImplementations] = useState<{ [key: string]: boolean }>({});
-    const { setAuthError, getAuthHeader } = useAuth();
+    const { setAuthError, getAuthHeader } = useAuthContext();
 
     const apiClient = ImplementationFactory.createApiDatasource(getAuthHeader);
     const implementationsRepository = new ImplementationsRepositoryImpl(apiClient);
