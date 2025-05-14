@@ -21,7 +21,7 @@ export class GithubRealTimeService {
         this.socketClient.on('updated-pull-request', (data: any) => {
             const updated = GhPullRequestMapper.fromObjectToEntity(data);
 
-            if (     updated.state === 'closed' && !updated.isMerged) updated.internal_status = 'closed';
+            if      (updated.state === 'closed' && !updated.isMerged) updated.internal_status = 'closed';
             else if (updated.state === 'closed' && updated.isMerged) updated.internal_status = 'merged';
             else     updated.internal_status = 'updated';
             

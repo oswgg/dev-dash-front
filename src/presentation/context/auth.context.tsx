@@ -39,8 +39,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(token);
         setAuthError(null);
         localStorage.setItem('token', token);
-        console.log(token);
-        console.log(localStorage.getItem('token'));
     }
     
     const logout = () => {
@@ -49,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
     
     const getAuthHeader = () => {
-        return token ? `Bearer ${token}` : ``;
+        return token ? token : ``;
     }
     
     return (

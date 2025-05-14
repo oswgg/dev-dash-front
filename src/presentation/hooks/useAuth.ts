@@ -28,7 +28,6 @@ export const useAuth = () => {
             setIsLoading(true);
             const res = await loginUseCase.execute(loginDto); 
             
-            console.log(res);
             login(res.token);
             setUser(res.user);
             setIsLoading(false);

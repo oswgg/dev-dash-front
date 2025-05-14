@@ -21,7 +21,7 @@ export const useGhPullRequests = (): {
     const [ownedError, setOwnedError] = useState<string | null>(null);
     const [toReviewError, setToReviewError] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const { setAuthError, logout, getAuthHeader } = useAuthContext();
+    const { setAuthError, getAuthHeader } = useAuthContext();
 
     const apiClient = GithubFactory.createApiDatasource(getAuthHeader());
     const socketClient = GithubFactory.createSocketDatasource('http://localhost:3000/github', getAuthHeader());
@@ -32,7 +32,7 @@ export const useGhPullRequests = (): {
     const getOwnedPullRequests = new GetGhPullRequests(gitHubRepository);
     const getPullRequestsToReview = new GetGhPullRequestsToReview(gitHubRepository);
 
-    const handleResult = (result, setData, setError) => {
+    const handleResult = (result: any, setData: any, setError: any) => {
         if (result.status === 'fulfilled') {
             setData(result.value);
             setError(null);

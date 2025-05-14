@@ -12,7 +12,7 @@ export class AxiosDatasourceImpl implements ApiDatasource {
             baseURL: BASE_URL,
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": this.token
+                "Authorization": "Bearer " + this.token,
             },
             withCredentials: true,
         });
@@ -20,7 +20,7 @@ export class AxiosDatasourceImpl implements ApiDatasource {
         this.axiosClient.interceptors.response.use((response): AxiosResponse<any, any> | Promise<AxiosResponse<any, any>> => {
             return Promise.resolve(response);
         }, (error: AxiosError) => {
-            return Promise.reject({ status: error.status, message: error.response?.data?.error });
+            return Promise.reject(error.response!.data);
         });
 
     }
@@ -30,7 +30,7 @@ export class AxiosDatasourceImpl implements ApiDatasource {
         return response.data;
     }
     
-    public get getToken(): string {
+    public get Token(): string {
         return this.token;
     }
     

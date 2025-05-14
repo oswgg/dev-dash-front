@@ -25,7 +25,7 @@ const EmptyState = ({ type }: { type: EmptyStateProps }) => {
                 <div className="rounded-full bg-muted p-3 mb-4">
                     <Github className="h-10 w-10 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No GitHub PRs Connected</h3>
+                <h3 className="text-lg font-semibold mb-2">No GitHub Connected</h3>
                 <p className="text-muted-foreground mb-4 max-w-md">
                     Connect your GitHub account to see and track your pull requests in one place.
                 </p>

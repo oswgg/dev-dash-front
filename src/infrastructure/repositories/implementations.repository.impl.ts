@@ -12,7 +12,7 @@ export class ImplementationsRepositoryImpl implements ImplementationsRepository 
     
     async activateImplementation(implementation: string): Promise<void> {
         const state = encodeURIComponent(window.location.href);
-        window.location.href = `${BASE_URL}/implementations/${implementation}/activate?returnTo=${state}&token=${this.api.getToken}`;
+        window.location.href = `${BASE_URL}/implementations/${implementation}/activate?returnTo=${state}&token=${this.api.Token}`;
     }
 
     async getIsImplementationActive(implementation: string): Promise<boolean> {
