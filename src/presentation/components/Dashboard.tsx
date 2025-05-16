@@ -5,6 +5,8 @@ import { useGetActiveImplementations } from "../hooks/useGetActiveImplementation
 import { AnimatePresence } from "framer-motion";
 import PullRequestCard from "./github/PullRequestCard";
 import EmptyState from "./EmptyState";
+import { useMondayTasks } from "../hooks/useMondayTasks";
+import MondayTaskCard from "./monday/MondayTaskCard";
 
 const implementedServices = ['github', 'monday'];
 
@@ -14,22 +16,34 @@ const Dashboard = () => {
 
     const { github, monday } = useGetActiveImplementations(implementedServices);
     const { owned, toReview, ownedError, toReviewError, error } = useGhPullRequests();
+    const { data } = useMondayTasks();
 
     const handleServiceTabChange = (value: string): void => setServiceTab(value);
     const handleFilterChange = (value: string): void => setFilterTab(value);
 
     const renderAll = () => {
-        const pullRequests = owned.map((pr, index) => {
-            const props = { ...pr, index };
-            return <PullRequestCard key={index}  {...props} />
-        });
+        const pullRequests = !github
+            ? <EmptyState type='github' />
+            : owned.map((pr, index) => {
+                const props = { ...pr, index };
+                return <PullRequestCard key={index} {...props} />
+            });
+
+        const mondayTasks = !monday
+            ? <EmptyState type='monday' />
+            : !data || data.tasks.length === 0 
+                ? <  >No data</>
+                : data.tasks.map((task, index) => {
+                    const props = { ...task, index };
+                    return  <MondayTaskCard key={index} {...props} ></MondayTaskCard>
+                });
 
         return (
             <>
                 <div className="flex items-center gap-3 mb-2 border-b pb-4">
                     <h1 className="text-2xl font-bold tracking-tight drop-shadow">Monday Tasks</h1>
                 </div>
-                {pullRequests}
+                {mondayTasks}
                 <div className="flex items-center gap-3 mb-2 mt-20 border-b pb-4">
                     <h1 className="text-2xl font-bold tracking-tight drop-shadow">Github Pull Requests</h1>
                 </div>
@@ -47,6 +61,13 @@ const Dashboard = () => {
             return <PullRequestCard key={index}  {...props} />
         });
     };
+
+    const renderMondayTasks = () => {
+        return data && data.tasks.length > 0 && data.tasks.map((task, index) => {
+            const props = { ...task, index };
+            return <MondayTaskCard key={index} {...props} />
+        })
+    }
 
     return (
         <div className="relative">
@@ -120,7 +141,7 @@ const Dashboard = () => {
                                     ? "a"
                                     : error
                                         ? <p>{error}</p> // Si hay error, mostramos el error
-                                        : (<AnimatePresence>{renderPRs()}</AnimatePresence>)
+                                        : (<AnimatePresence>{renderMondayTasks()}</AnimatePresence>)
                             }
                         </TabsContent>
                     </Tabs>

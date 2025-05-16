@@ -6,10 +6,10 @@ import { ImplementationsRepositoryImpl } from '@/infrastructure/repositories/imp
 import { motion } from "framer-motion";
 import { useAuthContext } from '../context/auth.context';
 
-type EmptyStateProps = 'github' | 'github-empty' | 'all' | 'all-empty';
+const PossibleImplementation = { github: 'github', monday: 'monday' } as const;
 
 
-const EmptyState = ({ type }: { type: EmptyStateProps }) => {
+const EmptyState = ({ type }: { type: keyof typeof PossibleImplementation }) => {
     const { getAuthHeader } = useAuthContext();
 
     const implRepository = new ImplementationsRepositoryImpl(new AxiosDatasourceImpl(getAuthHeader()));
