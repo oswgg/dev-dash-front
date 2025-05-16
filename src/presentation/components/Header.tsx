@@ -1,10 +1,18 @@
 import { Github, Settings, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuthContext } from '../context/auth.context';
 
 const Header = () => {
+    const { logout } = useAuthContext();
+
     const handleGoToRepository = () => {
         window.open('https://github.com/oswgg/dev-dash-front', '_blank');
+    }
+
+    const handleLogout = () => {
+        logout();
+        window.location.reload();
     }
 
     return (
@@ -33,6 +41,10 @@ const Header = () => {
 
                     <Button variant="ghost" size="icon" aria-label="Settings">
                         <Settings className="h-5 w-5" />
+                    </Button>
+
+                    <Button variant="outline" size="sm" aria-label="Logout" onClick={handleLogout}>
+                        Logout
                     </Button>
                 </div>
             </div>
