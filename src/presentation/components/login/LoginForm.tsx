@@ -12,9 +12,9 @@ export const LoginForm = ({ form, error, onSubmit, isLoading }) => (
                 name="email"
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Correo electrónico</FormLabel>
+                        <FormLabel>Email</FormLabel>
                         <FormControl>
-                            <Input placeholder="ejemplo@correo.com" type="email" {...field} disabled={isLoading} />
+                            <Input placeholder="sample@mail.com" type="email" {...field} disabled={isLoading} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -25,7 +25,7 @@ export const LoginForm = ({ form, error, onSubmit, isLoading }) => (
                 name="password"
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Contraseña</FormLabel>
+                        <FormLabel>Password</FormLabel>
                         <FormControl>
                             <Input placeholder="••••••••" type="password" {...field} disabled={isLoading} />
                         </FormControl>
@@ -34,23 +34,23 @@ export const LoginForm = ({ form, error, onSubmit, isLoading }) => (
                 )}
             />
 
-                    {error && (
-                        <Alert variant="destructive" className="mb-4">
-                            <AlertDescription>
-                                {error}
-                            </AlertDescription>
-                        </Alert>
-                    )}
+            {error && (
+                <Alert variant="destructive" className="mb-4">
+                    <AlertDescription>
+                        {error}
+                    </AlertDescription>
+                </Alert>
+            )}
             <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                     <div className="flex items-center justify-center">
                         {/* ...spinner svg... */}
-                        Iniciando sesión...
+                        Logging in
                     </div>
                 ) : (
                     <div className="flex items-center justify-center">
                         <Mail className="mr-2 h-4 w-4" />
-                        Iniciar sesión
+                        Login
                     </div>
                 )}
             </Button>

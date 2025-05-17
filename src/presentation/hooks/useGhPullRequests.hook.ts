@@ -23,7 +23,7 @@ export const useGhPullRequests = (): {
     const [ toReviewError, setToReviewError ] = useState<string | null>(null);
     const [ error, setError ] = useState<string | null>(null);
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
-    const { setAuthError, getAuthHeader } = useAuthContext();
+    const { setAuthError, getAuthHeader, logout } = useAuthContext();
 
     const apiClient = GithubFactory.createApiDatasource(getAuthHeader());
     const socketClient = GithubFactory.createSocketDatasource('http://localhost:3000/github', getAuthHeader());
@@ -60,13 +60,14 @@ export const useGhPullRequests = (): {
         
     
         const isUnauthorized = 
-            (owned.status === 'rejected' && owned.reason.status === 401) ||
-            (toReview.status === 'rejected' && toReview.reason.status === 401);
+            (owned.status === 'rejected' && owned.reason.message === 'Invalid Token') ||
+            (toReview.status === 'rejected' && toReview.reason.message === 'Invalid Token');
     
         if (isUnauthorized) {
             const msg = "Your session has expired. Please login again.";
             setAuthError(msg);
             setError(msg);
+            logout();
         }
         
         setIsLoading(false);

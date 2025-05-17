@@ -36,7 +36,7 @@ const LoginPage = () => {
         window.location.href = url;
     };
 
-    
+
     // When the user was redirected back to the login page from the oauth provider.
     // If the code is in the url, navigate to the oauth callback page
     useEffect(() => {
@@ -44,11 +44,11 @@ const LoginPage = () => {
         const code = query.get("code");
         const state = query.get("state");
         const error = query.get("error");
-        
+
         if (code) {
             navigate(`/oauth/${'google'}?code=${code}&state=${state}`); // TODO: just google for now
         }
-        
+
     }, []);
 
     const form = useForm<LoginFormValues>({
@@ -59,13 +59,13 @@ const LoginPage = () => {
         },
     });
 
-      return (
+    return (
         <div className="flex justify-center items-center min-h-screen p-4">
             <Card className="w-full max-w-md shadow-lg">
                 <CardHeader className="space-y-1 text-center">
                     <CardTitle className="text-2xl font-bold">Iniciar sesión</CardTitle>
                     <CardDescription>
-                        Ingresa tus credenciales o usa un proveedor de autenticación
+                        Use your email and password or login with a provider
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -78,7 +78,7 @@ const LoginPage = () => {
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
                             <span className="bg-background px-2 text-muted-foreground">
-                                O continúa con
+                                or
                             </span>
                         </div>
                     </div>
