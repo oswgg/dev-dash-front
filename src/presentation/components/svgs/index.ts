@@ -1,0 +1,1 @@
+export { default as Monday } from "./monday.svg?react";

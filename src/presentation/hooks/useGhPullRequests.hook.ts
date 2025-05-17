@@ -14,13 +14,15 @@ export const useGhPullRequests = (): {
     toReview     : GhPullRequest[],
     ownedError   : string | null, 
     toReviewError: string | null, 
-    error        : string | null 
+    error        : string | null,
+    isLoading    : boolean
 } => {
-    const [ownedPullRequests, setOwnedPullRequests] = useState<GhPullRequest[]>([]);
-    const [pullRequestsToReview, setPullRequestsToReview] = useState<GhPullRequest[]>([]);
-    const [ownedError, setOwnedError] = useState<string | null>(null);
-    const [toReviewError, setToReviewError] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [ ownedPullRequests, setOwnedPullRequests ] = useState<GhPullRequest[]>([]);
+    const [ pullRequestsToReview, setPullRequestsToReview ] = useState<GhPullRequest[]>([]);
+    const [ ownedError, setOwnedError ] = useState<string | null>(null);
+    const [ toReviewError, setToReviewError ] = useState<string | null>(null);
+    const [ error, setError ] = useState<string | null>(null);
+    const [ isLoading, setIsLoading ] = useState<boolean>(false);
     const { setAuthError, getAuthHeader } = useAuthContext();
 
     const apiClient = GithubFactory.createApiDatasource(getAuthHeader());
@@ -43,6 +45,11 @@ export const useGhPullRequests = (): {
     };
     
     const fetchData = async () => {
+        setIsLoading(true);
+        setError(null);
+        setOwnedError(null);
+        setToReviewError(null);
+
         const [owned, toReview] = await Promise.allSettled([
             getOwnedPullRequests.execute(),
             getPullRequestsToReview.execute()
@@ -61,6 +68,8 @@ export const useGhPullRequests = (): {
             setAuthError(msg);
             setError(msg);
         }
+        
+        setIsLoading(false);
     };
 
 
@@ -87,6 +96,7 @@ export const useGhPullRequests = (): {
         toReview: pullRequestsToReview,
         ownedError,
         toReviewError,
-        error
+        error,
+        isLoading
     };
 }

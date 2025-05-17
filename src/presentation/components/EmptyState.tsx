@@ -1,10 +1,12 @@
-import { Github, ExternalLink } from 'lucide-react';
+import { Github } from 'lucide-react';
+import { Monday } from './svgs';
 import { Button } from '@/components/ui/button';
 import { ActivateImplementation } from '@/application/activateImplementation';
 import { AxiosDatasourceImpl } from '@/infrastructure/datasources/axios.datasource.impl';
 import { ImplementationsRepositoryImpl } from '@/infrastructure/repositories/implementations.repository.impl';
 import { motion } from "framer-motion";
 import { useAuthContext } from '../context/auth.context';
+import { JSX } from 'react';
 
 const PossibleImplementation = { github: 'github', monday: 'monday' } as const;
 
@@ -19,53 +21,33 @@ const EmptyState = ({ type }: { type: keyof typeof PossibleImplementation }) => 
         activateImpl.execute(impl);
     }
 
-    const EmptyDictionary = {
+    const EmptyDictionary: { [key in keyof typeof PossibleImplementation]: JSX.Element } = {
         'github': (
             <div className="flex flex-col items-center justify-center p-8 text-center">
                 <div className="rounded-full bg-muted p-3 mb-4">
-                    <Github className="h-10 w-10 text-muted-foreground" />
+                    <Github />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">No GitHub Connected</h3>
                 <p className="text-muted-foreground mb-4 max-w-md">
                     Connect your GitHub account to see and track your pull requests in one place.
                 </p>
                 <Button className="gap-2" onClick={() => handleActivateImplementation("github")}>
-                    <Github className="h-4 w-4" />
                     Connect GitHub
                 </Button>
             </div>
         ),
-        'github-empty': (
+        'monday': (
             <div className="flex flex-col items-center justify-center p-8 text-center">
                 <div className="rounded-full bg-muted p-3 mb-4">
-                    <Github className="h-10 w-10 text-muted-foreground" />
+                    <Monday className="size-8 muted-foreground fill-white stroke-12 stroke-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No Pull Requests were found</h3>
+                <h3 className="text-lg font-semibold mb-2">No Monday Connected</h3>
                 <p className="text-muted-foreground mb-4 max-w-md">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod voluptatem ratione amet provident, repellendus laborum molestiae dolore totam culpa eius. Natus, perferendis?</p>
-                <Button className="gap-2">
-                    Refresh
-                </Button>
-            </div>
-        ),
-        'all-empty': (
-            <div className="flex flex-col items-center justify-center p-8 text-center">
-                <div className="rounded-full bg-muted p-3 mb-4">
-                    <ExternalLink className="h-10 w-10 text-muted-foreground" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">Connect Your Accounts</h3>
-                <p className="text-muted-foreground mb-4 max-w-md">
-                    Track all your work in one place by connecting your GitHub and Jira accounts.
+                    Connect your Monday account to see and track your tasks in one place.
                 </p>
-                <div className="flex gap-3">
-                    <Button className="gap-2">
-                        <Github className="h-4 w-4" />
-                        Connect GitHub
-                    </Button>
-                    <Button variant="outline">
-                        Connect Jira
-                    </Button>
-                </div>
+                <Button className="gap-2" onClick={() => handleActivateImplementation("monday")}>
+                    Connect Monday
+                </Button>
             </div>
         )
     }

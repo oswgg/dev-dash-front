@@ -8,8 +8,12 @@ import { MondayTask } from "@/domain/entities/monday-task.entity";
 
 
 
-export const useMondayTasks = () => {
+export const useMondayTasks = (): {
+    data: { user: MondayUser, tasks: MondayTask[] } | null,
+    isLoading: boolean
+} => {
     const [ data, setData ] = useState<{ user: MondayUser, tasks: MondayTask[] } | null>(null);
+    const [ isLoading, setIsLoading ] = useState(false);
     const { getAuthHeader } = useAuthContext();
     
     const apiClient = MondayFactory.createApiDatasource(getAuthHeader());
@@ -18,11 +22,11 @@ export const useMondayTasks = () => {
     const getTasks = new GetMondayTasks(mondayRepository);
     
     const fetchTasks = async () => {
+        setIsLoading(true);
         const tasks = await getTasks.execute();
         
-        console.log(tasks)
-        
         setData(tasks);
+        setIsLoading(false);
     }
     
     useEffect(() => {
@@ -32,6 +36,7 @@ export const useMondayTasks = () => {
     
     return {
         data,
+        isLoading
     }
 
 }
